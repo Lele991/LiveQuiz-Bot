@@ -7,12 +7,15 @@ import multiprocessing
 import wx
 import pyscreenshot as Imagegrab
 
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36', "Upgrade-Insecure-Requests": "1","DNT": "1","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Accept-Language": "en-US,en;q=0.5","Accept-Encoding": "gzip, deflate"}
+
 # PATH
 DOMAIN = "https://www.google.it/search?oe=utf8&ie=utf8&source=uds&start=0&hl=it&q="
 INDICE = 1
 N_DOMANDA = 0
 
-Debug = True
+Debug = False
+Test = True
 
 # COLORS
 class colors:
@@ -25,18 +28,17 @@ class colors:
     END = '\033[0m'
 
 # SCREEN CONSTANTS
-LEFT_QUESTION = 40
+LEFT_QUESTION = 30
 RIGHT_QUESTION = 1035
-QUESTION_TOP = 430
-QUESTION_BOTTOM = 630
+QUESTION_TOP = 420
+QUESTION_BOTTOM = 600
 
-LEFT_OPTION = 106
-RIGHT_OPTION = 1040
+LEFT_OPTION = 80
+RIGHT_OPTION = 970
 OPTION_HEIGHT = 190
-ROW_HEIGHT = 36
+ROW_HEIGHT = 30
 
-OPTION_POSITION = [700, 930, 1050]
-
+OPTION_POSITION = [600, 760, 925]
 
 def maximum(a, b, c):
     if (a >= b) and (a >= c):
@@ -114,9 +116,10 @@ def get_number_of_results(data):
     results_option = []
     # Perform request and read results
     for url in urls:
-        r = requests.get(url)
+        r = requests.get(url, headers=headers)
         soup = BeautifulSoup(r.text, 'lxml')
-        results = soup.find('div',{'id':'resultStats'}).text.split()[1].replace('.', '')
+        results = soup.find('div',{'id':'mBMHK'}).text.replace('Circa', '')
+        results = results.split()[0].replace('.', '')
         results_option.append((option_text, int(results)))
         if Debug:
             print(url)
@@ -125,8 +128,8 @@ def get_number_of_results(data):
 
 def manage_question():
     global N_DOMANDA
-    if Debug:
-        image = cv2.imread(r"C:\Users\Gabriele\Desktop\LiveQuiz - Bot\screen-domande\13.png", cv2.IMREAD_GRAYSCALE)
+    if Test:
+        image = cv2.imread(r"F:\Miei Progetti\LiveQuiz - Bot\screen-domande\tano1.jpg", cv2.IMREAD_GRAYSCALE)
     else:
         image = cv2.imread(SCREENSHOT, cv2.IMREAD_GRAYSCALE)
     ret, question = cv2.threshold(image[QUESTION_TOP:QUESTION_BOTTOM, LEFT_QUESTION:RIGHT_QUESTION], 200, 255, cv2.THRESH_BINARY_INV)
@@ -164,7 +167,7 @@ if __name__ == "__main__":
     while True:
         key = input(colors.BOLD + "\nPress " + colors.BOLD + colors.GREEN + "ENTER" + colors.END + colors.BOLD + " to take a screenshot" + " of the question or press " + colors.BOLD + colors.RED + "q" + colors.END + colors.BOLD + " to quit: ")
         if not key:
-            if Debug:
+            if Test:
                 print()
                 manage_question()
             else:
