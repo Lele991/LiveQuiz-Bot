@@ -151,7 +151,7 @@ def manage_question():
     question_text = pytesseract.image_to_string(question, lang='ita')
 
     if not question_text:
-        print(colors.RED + colors.BOLD + "Something went wrong reading the screenshot!" + colors.YELLOW + " Please try again." + colors.END)
+        print(colors.RED + colors.BOLD + "Si è verificato un errore durante la lettura dello screenshot!" + colors.YELLOW + " Per favore riprova." + colors.END)
     else:
         global INDICE
         negative = "NON" in question_text
@@ -175,12 +175,12 @@ def manage_question():
                 result_research.append(ricerca(question_text, option_list[i][0]))
             print_results(result_research, negative)
         except:
-            print("\n" + colors.RED + colors.BOLD + "The query produced no result." + colors.YELLOW + " Please try again." + colors.END)
+            print("\n" + colors.RED + colors.BOLD + "La ricerca non ha prodotto risultati." + colors.YELLOW + " Per favore riprova." + colors.END)
 
 if __name__ == "__main__":
     os.system("")
     while True:
-        key = input(colors.BOLD + "\nPress " + colors.BOLD + colors.GREEN + "ENTER" + colors.END + colors.BOLD + " to take a screenshot" + " of the question or press " + colors.BOLD + colors.RED + "q" + colors.END + colors.BOLD + " to quit: ")
+        key = input(colors.BOLD + "\nPremi " + colors.BOLD + colors.GREEN + "ENTER" + colors.END + colors.BOLD + " per eseguire uno screenshot" + " della domanda o premere " + colors.BOLD + colors.RED + "q" + colors.END + colors.BOLD + " per uscire: ")
         if not key:
             if Test:
                 print()
@@ -189,10 +189,10 @@ if __name__ == "__main__":
                 print()
                 N_DOMANDA = N_DOMANDA + 1
                 SCREENSHOT = "screenshot-domanda-"+ str(N_DOMANDA) +".png"
-                ret = os.system(r"%USERPROFILE%\AppData\Local\Android\sdk\platform-tools\adb exec-out screencap -p > " + SCREENSHOT)
+                ret = os.system("adb exec-out screencap -p > " + SCREENSHOT)
                 if ret == 0:
                     manage_question()
                 else:
-                    print(colors.BOLD + colors.YELLOW + "Please check your USB connection" + colors.END)
+                    print(colors.BOLD + colors.YELLOW + "Verifica il collegamento USB" + colors.END)
         elif key == 'q':
             break
