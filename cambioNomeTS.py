@@ -13,7 +13,6 @@ data = {"email": "FreeUser_7185342690", "password": "GY0BJ6Eup8gTXsZn"}
 serverName = {"serverName": "Carogna Virus"}
 
 session = requests.Session()
-test1 = session.post(urlLogin, headers=postHeaders, data=data)
-test2 = session.post(urlPanel, headers=postHeaders, data=serverName)
-print(test1.text)
-print(test2.text)
+session.post(urlLogin, headers=postHeaders, data=data)
+test = session.post(urlPanel, headers=postHeaders, data=serverName)
+print(test.text)
